@@ -183,4 +183,10 @@ void PrintEditingInfo(vector<string> list)
 		cout << *it << endl;
 	}
 	cout << "Success!";
+}out << "Edited files:" << endl;
+	for (vector<string>::iterator it = list.begin(); it != list.end(); ++it)
+	{
+		cout << *it << endl;
+	}
+	cout << "Success!";
 }

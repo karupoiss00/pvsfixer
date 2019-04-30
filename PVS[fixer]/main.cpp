@@ -24,24 +24,24 @@ int main(int argc, char** argv)
 	vector<string> extensionsList;
 	string copyright;
 	
-	extensionsList = ParseExtensions();
-	copyright = ParseCopyright();
-	LoadFilelist(&filesList, extensionsList);
-
 	if (argc < 2)
 	{
 		cout << "Wrong arguments!";
 		return 1;
 	}
 
-	if (argv[1][0] == '1')
+	extensionsList = ParseExtensions();
+	copyright = ParseCopyright();
+	LoadFilelist(&filesList, extensionsList);
+
+	if (strcmp(argv[1], "-cut"))
 	{
 		for (vector<string>::iterator it = filesList.begin(); it != filesList.end(); ++it)
 		{
 			InsertCopyright(*it, copyright);
 		}
 	}
-	else if (argv[1][0] == '0')
+	else if (strcmp(argv[1], "-insert"))
 	{
 		for (vector<string>::iterator it = filesList.begin(); it != filesList.end(); ++it)
 		{
@@ -172,6 +172,12 @@ vector<string> ParseExtensions()
 void PrintEditingInfo(vector<string> list)
 {
 	cout << "Edited files:" << endl;
+	for (vector<string>::iterator it = list.begin(); it != list.end(); ++it)
+	{
+		cout << *it << endl;
+	}
+	cout << "Success!";
+}out << "Edited files:" << endl;
 	for (vector<string>::iterator it = list.begin(); it != list.end(); ++it)
 	{
 		cout << *it << endl;

@@ -9,16 +9,24 @@ using namespace std;
 namespace fs = std::filesystem;
 
 void FindFiles(vector<string>* list, string ext);
+void LoadFilelist(vector<string>* fileslist, vector<string> extensions);
 void InsertCopyright(string filename, string copyrightStr);
 void CutCopyright(string filename, string copyrightStr);
+void PrintEditingInfo(vector<string> list);
+
 string ReadFile(const string &fileName);
+string ParseCopyright();
+vector<string> ParseExtensions();
 
 int main(int argc, char** argv)
 {
-	string copyright = "// This is a personal academic project. Dear PVS-Studio, please check it.\n\n// PVS-Studio Static Code Analyzer for C, C++, C#, and Java: http://www.viva64.com";
 	vector<string> filesList;
-	FindFiles(&filesList, ".cpp");
-	FindFiles(&filesList, ".h");
+	vector<string> extensionsList;
+	string copyright;
+	
+	extensionsList = ParseExtensions();
+	copyright = ParseCopyright();
+	LoadFilelist(&filesList, extensionsList);
 
 	if (argc < 2)
 	{
@@ -46,9 +54,18 @@ int main(int argc, char** argv)
 		return 1;
 	}
 
-	cout << "Success!";
-		
+	
+	PrintEditingInfo(filesList);
+
 	return 0;
+}
+
+void LoadFilelist(vector<string>* fileslist, vector<string> extensions)
+{
+	for (vector<string>::iterator it = extensions.begin(); it != extensions.end(); ++it)
+	{
+		FindFiles(fileslist, *it);
+	}
 }
 
 void FindFiles(vector<string>* list, string ext)
@@ -110,4 +127,54 @@ string ReadFile(const string &fileName)
 	stringstream ss;
 	ss << f.rdbuf();
 	return ss.str();
+}
+
+string ParseCopyright()
+{
+	string temp;
+	string configFileStr = ReadFile("config.ini");
+
+	for (size_t i = configFileStr.find_last_of("]") + 2; i < configFileStr.length(); i++)
+	{
+		temp += configFileStr[i];
+	}
+	return temp;
+}
+
+vector<string> ParseExtensions()
+{
+	string configFileStr = ReadFile("config.ini");
+	string parsedExtensions;
+	string curExtension;
+	vector<string> temp;
+
+	for (size_t i = configFileStr.find_first_of("]") + 2; i < configFileStr.find_last_of("["); i++)
+	{
+		parsedExtensions += configFileStr[i];
+	}
+
+	for (size_t i = 0; i < parsedExtensions.length(); i++)
+	{
+		if (parsedExtensions[i] != '\n')
+		{
+			curExtension += parsedExtensions[i];
+		}
+		else
+		{
+			temp.push_back(curExtension);
+			curExtension = "";
+		}
+	}
+
+	return temp;
+}
+
+void PrintEditingInfo(vector<string> list)
+{
+	cout << "Edited files:" << endl;
+	for (vector<string>::iterator it = list.begin(); it != list.end(); ++it)
+	{
+		cout << *it << endl;
+	}
+	cout << "Success!";
 }

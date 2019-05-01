@@ -53,7 +53,6 @@ int main(int argc, char** argv)
 		cout << "Wrong arguments!";
 		return 1;
 	}
-
 	
 	PrintEditingInfo(filesList);
 
@@ -75,8 +74,7 @@ void FindFiles(vector<string>* list, string ext)
 		if (!fs::is_regular_file(p.status()))
 		{
 			continue;
-		}
-			
+		}	
 
 		std::string name(p.path().string());
 
@@ -98,7 +96,6 @@ void InsertCopyright(string filename, string copyrightStr)
 	file.seekg(file._Seekbeg);
 
 	copyrightStr += "\n\n";
-
 	temp = copyrightStr + temp;
 
 	file.write(temp.c_str(), temp.length());
@@ -108,7 +105,6 @@ void CutCopyright(string filename, string copyrightStr)
 {
 	string temp = ReadFile(filename);
 	string out;
-
 	fstream file(filename);
 
 	copyrightStr += "\n\n";
@@ -138,6 +134,7 @@ string ParseCopyright()
 	{
 		temp += configFileStr[i];
 	}
+
 	return temp;
 }
 
@@ -172,18 +169,6 @@ vector<string> ParseExtensions()
 void PrintEditingInfo(vector<string> list)
 {
 	cout << "Edited files:" << endl;
-	for (vector<string>::iterator it = list.begin(); it != list.end(); ++it)
-	{
-		cout << *it << endl;
-	}
-	cout << "Success!";
-}out << "Edited files:" << endl;
-	for (vector<string>::iterator it = list.begin(); it != list.end(); ++it)
-	{
-		cout << *it << endl;
-	}
-	cout << "Success!";
-}out << "Edited files:" << endl;
 	for (vector<string>::iterator it = list.begin(); it != list.end(); ++it)
 	{
 		cout << *it << endl;
